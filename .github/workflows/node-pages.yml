@@ -1,0 +1,39 @@
+name: Deploy node app
+
+on:
+  push:
+    branches: ['master']
+
+  workflow_dispatch:
+    
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dept
+        run: npm ci
+      - name: Build app
+        run: npm run build
+      - name: Setup pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+      - name: Deploy to pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+
