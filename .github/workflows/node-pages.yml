@@ -29,6 +29,8 @@ jobs:
         run: npm ci
       - name: Build app
         run: npm run build
+        env:
+          baseURL: ${{ steps.deployment.outputs.page_url }}
       - name: Setup pages
         uses: actions/configure-pages@v4
       - name: Upload artifacts
